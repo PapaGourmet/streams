@@ -1,16 +1,17 @@
 import express, { Request, Response } from "express"
+import favicon from 'serve-favicon'
 import { Writable } from 'stream'
-import fs from 'fs'
 import { ServiceStream } from "./streams/iservicestream"
 import { ServiceStorageStream } from "./streams/servicestoragestreams"
+import path from "path"
 const _service = new ServiceStorageStream()
 const service = new ServiceStream(_service)
 
 const server = express()
+server.use(favicon(path.join(__dirname, '', 'favicon.ico')))
 const port = 5000 || process.env.PORT
 
 server.get("/stream", async (req: Request, res: Response) => {
-
 
     const metadata = await service.getMetadata('gs://papa-gourmet.appspot.com', '/file.mp4')
     const { type, size, contentType } = metadata
